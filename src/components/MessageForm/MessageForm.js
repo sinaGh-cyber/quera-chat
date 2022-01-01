@@ -1,8 +1,18 @@
-import React from 'react'
-import './MessageForm.css'
+import React, { useState } from 'react';
+import './MessageForm.css';
+
+const ME = 'me';
 
 function MessageForm({ onMessageSend }) {
-  function handleFormSubmit(event) {}
+  const [myVal, setMyVal] = useState('');
+
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    if (myVal && !/^\s*$/.test(myVal)) {
+      onMessageSend({ body: myVal.trim(), me: ME });
+    }
+  }
+
   return (
     <form
       className="MessageForm"
@@ -11,6 +21,7 @@ function MessageForm({ onMessageSend }) {
     >
       <div className="input-container">
         <input
+          onChange={(e) => setMyVal(e.target.value)}
           data-testid="input-message"
           type="text"
           placeholder="پیام خود را اینجا بنویسید..."
@@ -20,7 +31,7 @@ function MessageForm({ onMessageSend }) {
         <button type="submit">ارسال</button>
       </div>
     </form>
-  )
+  );
 }
 
-export default MessageForm
+export default MessageForm;
