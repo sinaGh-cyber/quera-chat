@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './MessageForm.css';
 
 const ME = 'me';
 
 function MessageForm({ onMessageSend }) {
   const [myVal, setMyVal] = useState('');
+  const myInputRef = useRef(undefined);
+  useEffect(() => {
+    myInputRef.current.focus();
+  }, []);
 
   function handleFormSubmit(event) {
     event.preventDefault();
     if (myVal && !/^\s*$/.test(myVal)) {
       onMessageSend({ body: myVal.trim(), me: ME });
+      setMyVal('');
     }
   }
 
@@ -21,7 +26,11 @@ function MessageForm({ onMessageSend }) {
     >
       <div className="input-container">
         <input
-          onChange={(e) => setMyVal(e.target.value)}
+          ref={myInputRef}
+          value={myVal}
+          onChange={(e) => {
+            setMyVal(e.target.value);
+          }}
           data-testid="input-message"
           type="text"
           placeholder="پیام خود را اینجا بنویسید..."
